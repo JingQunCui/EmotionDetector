@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pkl
+*.log
+node_modules/
+emotion-model/__pycache__/
+.ipynb_checkpoints
+*.ipynb
+venv/
+results/
