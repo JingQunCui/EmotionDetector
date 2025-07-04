@@ -8,3 +8,4 @@ emotion-model/__pycache__/
 *.ipynb
 venv/
 results/
+backend/emotion-model/
