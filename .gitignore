@@ -9,3 +9,4 @@ emotion-model/__pycache__/
 venv/
 results/
 backend/emotion-model/
+*.toml

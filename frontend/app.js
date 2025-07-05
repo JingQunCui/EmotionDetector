@@ -15,9 +15,10 @@ app.get("/", (req, res) => {
 
 app.post("/predict", async (req, res) => {
   const { sentence } = req.body;
+  const backendURL = process.env.BACKEND_URL || "http://127.0.0.1:8000";
 
   try {
-    const response = await axios.post("http://127.0.0.1:8000/predict", {
+    const response = await axios.post(`${backendURL}/predict`, {
       text: sentence
     });
 
