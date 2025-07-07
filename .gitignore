@@ -10,3 +10,4 @@ venv/
 results/
 backend/emotion-model/
 *.toml
+.env

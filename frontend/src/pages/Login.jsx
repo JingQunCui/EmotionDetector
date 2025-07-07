@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 export default function LoginForm({ onLogin }) {
-  const [email, setEmail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
@@ -12,7 +12,7 @@ export default function LoginForm({ onLogin }) {
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
 
     if (res.ok) {
@@ -27,10 +27,10 @@ export default function LoginForm({ onLogin }) {
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
       <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="username"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setusername(e.target.value)}
         required
       />
       <input

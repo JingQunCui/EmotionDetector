@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 export default function RegisterForm() {
-  const [email, setEmail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async (e) => {
@@ -11,7 +11,7 @@ export default function RegisterForm() {
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
 
     if (res.ok) {
@@ -25,10 +25,10 @@ export default function RegisterForm() {
     <form onSubmit={handleRegister}>
       <h2>Register</h2>
       <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="username"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setusername(e.target.value)}
         required
       />
       <input

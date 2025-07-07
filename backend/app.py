@@ -1,7 +1,10 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from dotenv import load_dotenv
 import torch
+import os
 
 # Load model and tokenizer (make sure this path matches your fine-tuned model)
 model_name = "distilbert-base-uncased"
@@ -13,6 +16,22 @@ tokenizer = AutoTokenizer.from_pretrained("./emotion-model")
 model.eval()
 
 app = FastAPI()
+
+# Load environment variables from .env
+load_dotenv()
+
+# Get the allowed origins from the .env
+raw_origins = os.getenv("ALLOWED_ORIGINS", "")
+origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+
+# Allow your frontend origin
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # or ["*"] for all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class TextIn(BaseModel):
     text: str

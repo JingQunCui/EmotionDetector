@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY . .
 
+COPY .env .
+
 # Make sure your start.sh script is executable
 RUN chmod +x start.sh
 
