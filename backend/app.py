@@ -1,21 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
+from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from dotenv import load_dotenv
+from routes import auth
+from jose import JWTError, jwt
+from config import SECRET_KEY, ALGORITHM
+from utils.emotion_model import predict_emotion
 import torch
 import os
-
-# Load model and tokenizer (make sure this path matches your fine-tuned model)
-model_name = "distilbert-base-uncased"
-num_labels = 6
-label_names = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
-
-model = AutoModelForSequenceClassification.from_pretrained("./emotion-model")
-tokenizer = AutoTokenizer.from_pretrained("./emotion-model")
-model.eval()
 
 # Load environment variables from .env
 load_dotenv()
@@ -24,6 +20,8 @@ load_dotenv()
 origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 app = FastAPI()
+
+app.include_router(auth.router)
 
 # Allow your frontend origin
 app.add_middleware(
@@ -37,12 +35,21 @@ app.add_middleware(
 class TextIn(BaseModel):
     text: str
 
+oauth2_scheme = OAuth2PasswordBearer(tokenURL='login')
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload["sub"]
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
 @app.options("/predict")
 async def options_handler(request: Request):
     return JSONResponse(status_code=200, content={"message": "Preflight OK"})
 
 @app.post("/predict")
-async def predict_emotion(data: TextIn):
+async def predict_emotion(data: TextIn, user: str = Depends(get_current_user)):
     inputs = tokenizer(data.text, return_tensors="pt", truncation=True, padding=True)
     with torch.no_grad():
         outputs = model(**inputs)

@@ -11,3 +11,4 @@ results/
 backend/emotion-model/
 *.toml
 .env
+config.py
