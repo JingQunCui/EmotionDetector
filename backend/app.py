@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.requests import Request
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from dotenv import load_dotenv
@@ -15,19 +17,18 @@ model = AutoModelForSequenceClassification.from_pretrained("./emotion-model")
 tokenizer = AutoTokenizer.from_pretrained("./emotion-model")
 model.eval()
 
-app = FastAPI()
-
 # Load environment variables from .env
 load_dotenv()
 
 # Get the allowed origins from the .env
-raw_origins = os.getenv("ALLOWED_ORIGINS", "")
-origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
+
+app = FastAPI()
 
 # Allow your frontend origin
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # or ["*"] for all origins
+    allow_origins=[origin.strip() for origin in origins],  # or ["*"] for all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,6 +36,10 @@ app.add_middleware(
 
 class TextIn(BaseModel):
     text: str
+
+@app.options("/predict")
+async def options_handler(request: Request):
+    return JSONResponse(status_code=200, content={"message": "Preflight OK"})
 
 @app.post("/predict")
 async def predict_emotion(data: TextIn):
