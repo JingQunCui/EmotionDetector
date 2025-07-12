@@ -19,3 +19,7 @@ A web application that detects emotions from user-submitted text using a fine-tu
 | React + Vite | FastAPI | Transformers (HuggingFace) | Docker + Fly.io |
 
 ---
+
+## Product
+
+This is a template for an AI based application. Model used is an emotion detector with a user registration and login implemented.
