@@ -5,19 +5,12 @@ from fastapi.requests import Request
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from dotenv import load_dotenv
 from routes import auth
 from jose import JWTError, jwt
-from config import SECRET_KEY, ALGORITHM
+from config import SECRET_KEY, ALGORITHM, ALLOWED_ORIGINS
 from utils.emotion_model import predict_emotion
 import torch
 import os
-
-# Load environment variables from .env
-load_dotenv()
-
-# Get the allowed origins from the .env
-origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 app = FastAPI()
 
@@ -26,7 +19,7 @@ app.include_router(auth.router)
 # Allow your frontend origin
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in origins],  # or ["*"] for all origins
+    allow_origins=[origin.strip() for origin in ALLOWED_ORIGINS],  # or ["*"] for all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
