@@ -1,59 +1,55 @@
+// src/components/Login.jsx
 import { useState } from "react";
+import "../styles/global.css";
 
-export default function LoginForm({ onLogin }) {
-  const [username, setusername] = useState("");
+
+export default function Login() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      onLogin(data);
-    } else {
-      alert("Login failed");
-    }
+    // Add login logic here
+    alert(`Logging in with ${username}`);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white p-8 rounded-xl shadow-md space-y-6"
-      >
-        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-sm bg-white p-8 border border-gray-300 rounded-md shadow-md">
+        <h1 className="text-3xl font-semibold text-center mb-6 font-sans">Instagram</h1>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            className="w-full px-4 py-2 border rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-semibold"
+          >
+            Log In
+          </button>
+        </form>
 
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setusername(e.target.value)}
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="flex justify-center my-4">
+          <span className="text-gray-400 text-sm">OR</span>
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <button
-          type="submit"
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
-        >
-          Login
-        </button>
-      </form>
+        <p className="text-center text-sm text-blue-500 hover:underline cursor-pointer">
+          Forgot password?
+        </p>
+      </div>
     </div>
   );
 }
