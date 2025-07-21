@@ -22,10 +22,10 @@ A web application that detects emotions from user-submitted text using a fine-tu
 
 ## Product
 
-This is a template for an AI based application. Model used is an emotion detector with a user registration and login implemented.
+This project is a template for an AI-powered web application featuring an emotion detection model, along with user registration and login functionality. The app allows users to input text and receive an analysis of the emotional tone behind it, powered by a fine-tuned transformer model.
 
 ---
 
 ## Audience
 
-Users that are new to a certain language and are unable to tell the tone of speech.
+This application is designed for users who are new to a language or have difficulty interpreting tone or sentiment in written communication. It can be especially helpful for non-native speakers, language learners, or individuals seeking more confidence when navigating emotional nuance in conversation.
